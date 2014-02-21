@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.opensourceforlife.portlet.samplerecyclebin.service.EventLocalService" class="com.opensourceforlife.portlet.samplerecyclebin.service.impl.EventLocalServiceImpl" />
+	<bean id="com.opensourceforlife.portlet.samplerecyclebin.service.EventService" class="com.opensourceforlife.portlet.samplerecyclebin.service.impl.EventServiceImpl" />
+	<bean id="com.opensourceforlife.portlet.samplerecyclebin.service.persistence.EventPersistence" class="com.opensourceforlife.portlet.samplerecyclebin.service.persistence.EventPersistenceImpl" parent="basePersistence" />
+</beans>
