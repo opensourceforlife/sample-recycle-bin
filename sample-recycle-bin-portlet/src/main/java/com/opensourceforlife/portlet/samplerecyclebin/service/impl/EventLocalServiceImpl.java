@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.User;
@@ -143,6 +145,7 @@ public class EventLocalServiceImpl extends EventLocalServiceBaseImpl {
 				Event.class.getName(), event.getEventId());
 		}
 		catch (PortalException e) {
+			_log.error(e.getMessage(), e);
 		}
 
 		return eventPersistence.remove(event);
@@ -279,4 +282,7 @@ public class EventLocalServiceImpl extends EventLocalServiceBaseImpl {
 
 		return event;
 	}
+
+	private static Log _log =
+		LogFactoryUtil.getLog(EventLocalServiceImpl.class);
 }

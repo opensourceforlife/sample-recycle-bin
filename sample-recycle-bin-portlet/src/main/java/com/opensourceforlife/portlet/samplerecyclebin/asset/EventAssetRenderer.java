@@ -11,6 +11,8 @@ import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.trash.TrashRenderer;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -88,8 +90,10 @@ public class EventAssetRenderer extends BaseAssetRenderer
 				UserLocalServiceUtil.getUser(_event.getUserId()).getFullName();
 		}
 		catch (PortalException e) {
+			_log.error(e.getMessage(), e);
 		}
 		catch (SystemException e) {
+			_log.error(e.getMessage(), e);
 		}
 		return userName;
 	}
@@ -170,4 +174,5 @@ public class EventAssetRenderer extends BaseAssetRenderer
 	}
 
 	private final Event _event;
+	private static Log _log = LogFactoryUtil.getLog(EventAssetRenderer.class);
 }
