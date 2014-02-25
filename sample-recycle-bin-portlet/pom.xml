@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.opensourceforlife.portlet.samplerecyclebin</groupId>
 		<artifactId>sample-recycle-bin</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -12,7 +12,7 @@
 	<artifactId>sample-recycle-bin-portlet</artifactId>
 	<packaging>war</packaging>
 	<name>sample-recycle-bin Portlet</name>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<build>
 		<plugins>
 			<plugin>
