@@ -20,6 +20,10 @@
 	String redirect = PortalUtil.getCurrentURL(renderRequest);
 %>
 
+<portlet:actionURL name="restoreEvent" var="undoTrashURL" />
+
+<liferay-ui:trash-undo portletURL="<%= undoTrashURL %>" />
+
 <aui:button-row>
 	<portlet:renderURL var="addEventURL">
 		<portlet:param name="mvcPath" value="/html/portlet/sample-recycle-bin/edit_event.jsp" />

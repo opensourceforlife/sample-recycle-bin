@@ -2,6 +2,8 @@
 package com.opensourceforlife.portlet.samplerecyclebin;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -10,12 +12,16 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.trash.util.TrashUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.opensourceforlife.portlet.samplerecyclebin.model.Event;
 import com.opensourceforlife.portlet.samplerecyclebin.service.EventLocalServiceUtil;
@@ -46,8 +52,28 @@ public class SampleRecycleBinPortlet extends MVCPortlet {
 			(ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
 		if (cmd.equals(Constants.MOVE_TO_TRASH)) {
-			EventLocalServiceUtil.moveEntryToTrash(
-				themeDisplay.getUserId(), eventId);
+			Event event =
+				EventLocalServiceUtil.moveEntryToTrash(
+					themeDisplay.getUserId(), eventId);
+
+			Map<String, String[]> data = new HashMap<String, String[]>();
+
+			data.put("deleteEntryClassName", new String[] {
+				Event.class.getName()
+			});
+			data.put("deleteEntryTitle", new String[] {
+				TrashUtil.getOriginalTitle(event.getName())
+			});
+			data.put("restoreEntryIds", new String[] {
+				String.valueOf(eventId)
+			});
+
+			SessionMessages.add(request, PortalUtil.getPortletId(request) +
+				SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
+
+			SessionMessages.add(request, PortalUtil.getPortletId(request) +
+				SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+
 		}
 		else if (cmd.equals(Constants.DELETE)) {
 			EventLocalServiceUtil.deleteEvent(eventId);
@@ -104,6 +130,23 @@ public class SampleRecycleBinPortlet extends MVCPortlet {
 		}
 
 		return event;
+	}
+
+	public void restoreEvent(
+		final ActionRequest request, final ActionResponse response)
+		throws Exception {
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+
+		long[] restoreEntryIds =
+			StringUtil.split(
+				ParamUtil.getString(request, "restoreEntryIds"), 0L);
+
+		for (long restoreEntryId : restoreEntryIds) {
+			EventLocalServiceUtil.restoreEntryFromTrash(
+				themeDisplay.getUserId(), restoreEntryId);
+		}
 	}
 
 	private static Log _log =
